@@ -16,7 +16,8 @@ const app = Vue.createApp({
       }
     },
     setname(e){
-      this.name = e.target.value
+      this.name = e.target.value;
+      console.log(this.name);
 
 
     },
