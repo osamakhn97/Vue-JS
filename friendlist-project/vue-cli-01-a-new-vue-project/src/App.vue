@@ -2,18 +2,22 @@
  <header>
     <h1>Friends</h1> 
 </header>
+      <new-friend 
+      @add-contact="addContact"
       
+      ></new-friend>
     <section>
        <ul>
          <friend-contact 
          v-for="item in obj"
-         :key = "item.contact"
+         :key = "item.id"
          :id = "item.id"
          :user-name = "item.name" 
          :user-age = "item.age"
          :cell-n = "item.contact"
          :is-fav = "item.isFav"
          @toggle-fav = "toggleFunction"
+         @delete = "deleteItem"
 
          
          ></friend-contact>
@@ -35,7 +39,7 @@ export default {
                    isFav:true
                },
                   {
-                   id:'ss2323',
+                   id:'ss3ss2323',
                    name:'Ahmed',
                    age:"21",
                    contact:"4354645",
@@ -49,6 +53,28 @@ export default {
            const friend = this.obj.find(e=> e.id === val);
            friend.isFav = !friend.isFav
 
+
+       },
+       addContact(name,age,contact){
+         const newFriend = {
+           id: new Date().toISOString(),
+           name:name,
+           age:age,
+           contact:contact,
+           isFav:false
+         }
+         this.obj.push(newFriend);
+
+       },
+       deleteItem(fid){
+         
+      this.obj.forEach(e=>{
+        if(e.id === fid){
+          this.obj.splice(this.obj.indexOf(e),1);
+        }
+      })
+     
+        
 
        }
    }
@@ -88,7 +114,7 @@ body {
   list-style: none;
 }
 
-#app li {
+#app li , #app form {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   margin: 1rem auto;
   border-radius: 10px;
@@ -97,6 +123,7 @@ body {
   width: 90%;
   max-width: 40rem;
 }
+
 
 #app h2 {
   font-size: 2rem;
@@ -121,6 +148,18 @@ body {
   border-color: #ec3169;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
 }
-
+#app input {
+  font: inherit;
+  padding: 0.15rem;
+}
+#app label {
+  font-weight: bold;
+  margin-right: 1rem;
+  width: 7rem;
+  display: inline-block;
+}
+#app form div {
+  margin: 1rem 0;
+}
 
 </style>

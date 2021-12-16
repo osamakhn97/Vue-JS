@@ -4,6 +4,7 @@
         <h2>{{userName}} {{isFav ? "(Favourite)" : ""}}</h2>
         <button @click = "toggleDetails">{{hidden ? "Hide" : "Show" }} Details</button>
         <button @click = "toggleFav">Favourite</button>
+        <button @click = "$emit('delete',id)">Delete</button>
         <ul v-if = "hidden">
             <li><strong>Phone:</strong>{{cellN}}</li>
             <li><strong>Age:</strong>{{userAge}}</li>
@@ -43,6 +44,7 @@ export default{
             default :false
         }
     }, 
+    emits:['toggle-fav','delete'],
     data(){
         return {
             hidden:false,
@@ -57,6 +59,9 @@ export default{
             // this.fav = !this.fav
             this.$emit('toggle-fav',this.id)
             
+        },
+        del(){
+
         }
     }
 };
