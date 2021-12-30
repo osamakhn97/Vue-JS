@@ -11,7 +11,9 @@ const route = createRouter({
     routes:[
         {path:'/', redirect:'/coaches'},
         {path:'/coaches',component:coachList},
-        {path:'/coaches/:id',component:coachDetails,children:[
+        {path:'/coaches/:id',component:coachDetails,
+        props:true,
+        children:[
             {path:'contact',component:contactCoach}
         ]},
         {path:'/register',component:coachRegistration},
