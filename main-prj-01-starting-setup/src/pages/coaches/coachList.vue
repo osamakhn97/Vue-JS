@@ -1,14 +1,21 @@
 <template>
+<base-dialog :show = "!!error" title="An error occured" @close = "handleError">
+
+{{error}}
+</base-dialog>
     <section>
         <coach-filter @change-filter = "updateFilter"></coach-filter>
     </section>
     <section>
         <base-card>
         <div class="controls">
-            <base-button mode="outline">Refresh</base-button>
-            <base-button v-if="isCoach" link to="/register">Register as a Coach</base-button>
+            <base-button mode="outline" @click = 'loadCoaches(true)'>Refresh</base-button>
+            <base-button v-if="!isCoach && !isLoading" link to="/register">Register as a Coach</base-button>
         </div>
-        <ul v-if="hasCoaches">List of Coaches
+        <div v-if = "isLoading">
+        <base-spinner></base-spinner>
+        </div>
+        <ul v-else-if="hasCoaches">List of Coaches
         <!-- <li v-for="coach in coaches" :key="coach.id">{{coach.firstName}}</li> -->
         <coach-item v-for="coach in coaches" 
         :key="coach.id"
@@ -30,10 +37,13 @@ import coachFilter from '../../components/coaches/filterCoaches.vue'
 export default {
     data(){
         return{
+            error:null,
+            isLoading:false,
             activeFilters:{
                 frontend:true,
                 backend:true,
-                career:true
+                career:true,
+                
 
             }
         }
@@ -64,13 +74,32 @@ export default {
 
         },
          hasCoaches(){
-        return this.$store.getters['coaches/hasCoaches'];
+        return !this.isLoading && this.$store.getters['coaches/hasCoaches'];
     }
     },
     methods:{
         updateFilter(updatedFilters){
             this.activeFilters = updatedFilters
+        },
+        async loadCoaches(refresh = false){
+            this.isLoading = true;
+            try{
+                await this.$store.dispatch('coaches/loadCoaches',{forceRefresh:refresh});
+            }
+            catch(e){
+                this.error = e.message || "Something went wrong"
+
+            }
+            this.isLoading = false;
+        },
+        handleError(){
+            this.error = null;
+
         }
+    },
+    created(){
+        // console.log(this.isCoach)
+        this.loadCoaches();
     }
    
 }

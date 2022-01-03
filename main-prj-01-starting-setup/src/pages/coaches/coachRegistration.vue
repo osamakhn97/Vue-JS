@@ -12,6 +12,7 @@ export default {
     methods:{
         save(FormData){
             this.$store.dispatch('coaches/registerCoach',FormData);
+            console.log(FormData);
             this.$router.replace('/')
 
 
