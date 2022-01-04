@@ -10,10 +10,11 @@
         <base-card>
         <div class="controls">
             <base-button mode="outline" @click = 'loadCoaches(true)'>Refresh</base-button>
-            <base-button v-if="!isCoach && !isLoading" link to="/register">Register as a Coach</base-button>
+            <base-button link to="/auth" v-if="!isLoggedIn">Login</base-button>
+            <base-button v-if="isLoggedIn /*&& !isCoach*/ && !isLoading" link to="/register">Register as a Coach</base-button>
         </div>
         <div v-if = "isLoading">
-        <base-spinner></base-spinner>
+        <base-spinner></base-spinner> 
         </div>
         <ul v-else-if="hasCoaches">List of Coaches
         <!-- <li v-for="coach in coaches" :key="coach.id">{{coach.firstName}}</li> -->
@@ -51,7 +52,12 @@ export default {
 
     },
     components:{coachItem,coachFilter},
+    
     computed:{
+        isLoggedIn(){
+            return this.$store.getters.isAuthenticated;
+
+        },
         isCoach(){
             return this.$store.getters['coaches/isCoach']
 
@@ -100,6 +106,7 @@ export default {
     created(){
         // console.log(this.isCoach)
         this.loadCoaches();
+        console.log(this.isLoggedIn)
     }
    
 }
